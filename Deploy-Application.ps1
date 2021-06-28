@@ -144,7 +144,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2021-2-0.exe" -Parameters "ACCEPTEULA=1 AUTOUPDATE=1 DATABASEDRIVERS=1 DESKTOPSHORTCUT=1 /quiet /norestart" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2021-2-0.exe" -Parameters "ACCEPTEULA=1 AUTOUPDATE=1 DATABASEDRIVERS=1 DESKTOPSHORTCUT=1 /quiet /norestart" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 
