@@ -132,9 +132,6 @@ Try {
 			Remove-Item -Path "C:\Program Files\Tableau\*.*" -Recurse -Force
 		}
 
-
-
-
 		##*===============================================
 		##* INSTALLATION
 		##*===============================================
