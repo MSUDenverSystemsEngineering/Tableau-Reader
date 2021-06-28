@@ -124,7 +124,7 @@ Try {
 		Show-InstallationWelcome -CloseApps 'tabreader' -CheckDiskSpace -PersistPrompt
 
 		## Show Progress Message
-		Show-InstallationProgress -StatusMessage "Uninstalling all previous versions of $appName..."
+		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
 		if (Test-Path -Path "C:\Program Files\Tableau") {
