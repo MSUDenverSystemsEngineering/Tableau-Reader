@@ -127,7 +127,13 @@ Try {
 		Show-InstallationProgress -StatusMessage "Uninstalling all previous versions of $appName..."
 
 		## <Perform Pre-Installation tasks here>
-		Remove-MSIApplications -Name 'Tableau Reader'
+		if (Test-Path -Path "C:\Program Files\Tableau") {
+			Remove-MSIApplications -Name 'Tableau Reader'
+			Remove-Item -Path "C:\Program Files\Tableau\*.*" -Recurse -Force
+		}
+
+
+
 
 		##*===============================================
 		##* INSTALLATION
