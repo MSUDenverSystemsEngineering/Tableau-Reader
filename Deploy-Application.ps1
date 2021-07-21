@@ -129,7 +129,6 @@ Try {
 		## <Perform Pre-Installation tasks here>
 		if (Test-Path -Path "C:\Program Files\Tableau") {
 			Remove-MSIApplications -Name 'Tableau Reader'
-			Remove-Item -Path "C:\Program Files\Tableau\*.*" -Recurse -Force
 		}
 
 		##*===============================================
