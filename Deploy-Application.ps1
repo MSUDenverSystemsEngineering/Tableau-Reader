@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 	This script performs the installation or uninstallation of an application(s).
 	# LICENSE #
@@ -67,13 +67,13 @@ Try {
 	## Variables: Application
 	[string]$appVendor = 'Tableau'
 	[string]$appName = 'Reader'
-	[string]$appVersion = '2021.4.1'
+	[string]$appVersion = '2021.4.4'
 	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '12/17/2021'
-	[string]$appScriptAuthor = 'David Torres'
+	[string]$appScriptDate = '03/10/2022'
+	[string]$appScriptAuthor = 'Craig Myers'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
 	[string]$installName = ''
@@ -87,8 +87,8 @@ Try {
 
 	## Variables: Script
 	[string]$deployAppScriptFriendlyName = 'Deploy Application'
-	[version]$deployAppScriptVersion = [version]'3.8.3'
-	[string]$deployAppScriptDate = '30/09/2020'
+	[version]$deployAppScriptVersion = [version]'3.8.4'
+	[string]$deployAppScriptDate = '26/01/2021'
 	[hashtable]$deployAppScriptParameters = $psBoundParameters
 
 	## Variables: Environment
@@ -120,16 +120,33 @@ Try {
 		##*===============================================
 		[string]$installPhase = 'Pre-Installation'
 
-		## Show Welcome Message, close Internet Explorer if required, verify there is enough disk space to complete the install, and persist the prompt
+		## Show Welcome Message, close Tableau Reader if required, verify there is enough disk space to complete the install, and persist the prompt
 		Show-InstallationWelcome -CloseApps 'tabreader' -CheckDiskSpace -PersistPrompt
 
-		## Show Progress Message
+		## Show Progress Message (with the default message)
 		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
 		if (Test-Path -Path "C:\Program Files\Tableau") {
 			Remove-MSIApplications -Name 'Tableau Reader'
 		}
+		Write-Log -Message "Waiting 5 seconds before proceeding..." -Source 'Pre-Installation' -LogType 'CMTrace'
+		Start-Sleep -s 5
+		# The MSI uninstaller will occasionally leave registry items behind that can cause issues when installing newer versions of the software.
+		if(Get-InstalledApplication -Name 'Tableau Reader') {
+			$checkForTableau = Get-InstalledApplication -Name 'Tableau Reader'
+			Write-Log -Message "Tableau Installation Status: $checkForTableau" -Source 'Pre-Installation' -LogType 'CMTrace'
+			$uninstallString = $checkForTableau.UninstallString
+			Write-Log -Message "Found the following uninstall string: $uninstallString" -Source 'Pre-Installation' -LogType 'CMTrace'
+			$uninstallerPath = $uninstallString.Substring(1, $uninstallString.lastIndexOf('.exe')+3)
+			Write-Log -Message "Uninstall string after stripping parameters: $uninstallerPath" -Source 'Pre-Installation' -LogType 'CMTrace'
+			# Write-Log -Message "Waiting 5 seconds before proceeding..." -Source 'Pre-Installation' -LogType 'CMTrace'
+			# Start-Sleep -s 5
+			Execute-Process -Path $uninstallerPath -Parameters "/uninstall /quiet" -WindowStyle "Hidden" -PassThru
+			If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+		}
+
+
 
 		##*===============================================
 		##* INSTALLATION
@@ -143,8 +160,9 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2021-4-1.exe" -Parameters "ACCEPTEULA=1 AUTOUPDATE=1 DATABASEDRIVERS=1 DESKTOPSHORTCUT=1 /quiet /norestart" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
+		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2021-4-4.exe" -Parameters "ACCEPTEULA=1 AUTOUPDATE=1 DATABASEDRIVERS=1 DESKTOPSHORTCUT=1 /quiet /norestart" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+
 
 
 		##*===============================================
@@ -164,7 +182,7 @@ Try {
 		##*===============================================
 		[string]$installPhase = 'Pre-Uninstallation'
 
-		## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
+		## Show Welcome Message, close Tableau Reader with a 60 second countdown before automatically closing
 		Show-InstallationWelcome -CloseApps 'tabreader' -CloseAppsCountdown 60
 
 		## Show Progress Message (with the default message)
@@ -172,7 +190,7 @@ Try {
 
 		## <Perform Pre-Uninstallation tasks here>
 		##Remove-MSIApplications -Name 'Tableau Reader'
-		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2021-4-1.exe" -Parameters "/uninstall /quiet /norestart" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2021-4-4.exe" -Parameters "/uninstall /quiet /norestart" -WindowStyle "Hidden" -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
@@ -249,8 +267,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUfXowSNzCxHk+dL6IjAV0PbE2
-# OJWgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUbGO/ogNdKiMg3msgBlsd9vqQ
+# IySgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -350,13 +368,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFP+XtMGoVgOwzfzlM8t/WLWFAu+GMA0GCSqGSIb3DQEBAQUABIIBgIpkCHcN
-# hSsEKMKQ3dar2XgR+cK64VNVpp1DkJftF4jgtCV7RLlP1wQSAsOM+wIC0e4+iPws
-# JRht4T2i/aE+CfahsokvnevYCXq32oMANMdBB0PRgXcsvn/hBsU86UXFyMZEgAjj
-# poUngOwXEBa0tMCgKnZLJlG4ebE0XL+k5IhcahRhPUExnlubINitiIaHsnZi4NWU
-# OBbq3GyHdyXe4lcE2XGS7QEQaT3OAdoVbMtimqmyXeBQeUSkHFp2nTy0E4aybvjG
-# huRTnrmoi1MaeAyAkpmBJTJU4ndkRCG6u5IFai3W8lu6gPyoaYFLKKtqXDWsIqrL
-# kgnVlePOrSZqAT/JG9XJu6+JQrPr77cXQGWa7xadgPkq+jcFa0NmWE11cg6jtT6F
-# jpi+xUmKJwb9OuvFyRnFifs5SlzsYwOYF0EUFIsjn/Fvzj5RsrUG1/uiPSB9/xrI
-# 7MfTZo4Ib8uQtooS4e8i1o+x8zBazUPJq66C4uVJAK6SJoJhhbH68zOTyg==
+# MRYEFO7fDPN1X1Xz1+ukf35OK+OI0UA1MA0GCSqGSIb3DQEBAQUABIIBgC3gO8uo
+# 74Fs9/FXdqOnYBHRX2u9vkK85u4uJqOVx3gXSvS7O48UhGRf3mz8XjiB/dRYXWmg
+# I8oLRZtqtchac3IJKa38SZWOm9iGPk5v3RGRps3p0vVQM+TvvHe+nnyZ9TqfvdYM
+# MTKBWsWhxl1qShwMlMTKBABU+TUL+ekR216mmAoH3kfmLAubDDvtJgXdKmA8U48a
+# AxqxuBqcn8mdJgXCGIiXs3fOmqYxgvvd12sE6LOWWQndR95pQOcWeQPpT8m8dgey
+# 0OkqVe827qhnrVEOzMO7Ili1Vz0eFk/QD+imj93pakX3qSbweg86R0Z2fGMqG7x4
+# oGwJJ5+fHRJnPtez+hi4W/QUuZ+4B6YfbMtXA3/XEb5DzTjDM+bRLp00dnqCpBKh
+# q/OWYViC/Kur262/qPK0rhvgIrVskhXjeBQZOdX97saBz07fVDiuctfeuBl7qQ9N
+# UqBuDzU7b0mHnnugEku7iP+qiaEOk9w9PvmGj7GQRLw7Hit1K3hqiXjyfA==
 # SIG # End signature block
