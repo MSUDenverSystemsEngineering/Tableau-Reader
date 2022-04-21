@@ -67,12 +67,12 @@ Try {
 	## Variables: Application
 	[string]$appVendor = 'Tableau'
 	[string]$appName = 'Reader'
-	[string]$appVersion = '2021.4.4'
+	[string]$appVersion = '2022.0.1'
 	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
-	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '03/10/2022'
+	[string]$appScriptVersion = '1.0.14'
+	[string]$appScriptDate = '04/21/2022'
 	[string]$appScriptAuthor = 'Craig Myers'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
@@ -163,7 +163,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2021-4-4.exe" -Parameters "ACCEPTEULA=1 AUTOUPDATE=1 DATABASEDRIVERS=1 DESKTOPSHORTCUT=1 /quiet /norestart" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
+		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2022-1-0.exe" -Parameters "ACCEPTEULA=1 AUTOUPDATE=1 DATABASEDRIVERS=1 DESKTOPSHORTCUT=1 /quiet /norestart" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 
@@ -193,7 +193,7 @@ Try {
 
 		## <Perform Pre-Uninstallation tasks here>
 		##Remove-MSIApplications -Name 'Tableau Reader'
-		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2021-4-4.exe" -Parameters "/uninstall /quiet /norestart" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2022-1-0.exe" -Parameters "/uninstall /quiet /norestart" -WindowStyle "Hidden" -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
@@ -270,8 +270,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUD1I9CBh5Jb9nQ+zjjK6cY4hq
-# u72gghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUlgUX0kHaIE98G+pTg5+g44Kt
+# MQagghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -371,13 +371,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFPyljffLnAwNhclzj7qgHWLprV4DMA0GCSqGSIb3DQEBAQUABIIBgCfdOyeK
-# 0Jawvb4JpPvKDLoZL9DUv3KCSmsFiyYRRrTLYSYUhNhmxJhxguD5p2hLAMQPo2yV
-# N+yNgSxfSh4cBnRsr2/lYoiHkNxyFZj3tv+pBFGlu+AuRgl1m6LKGuSuEYVRX8TJ
-# fT84ZovSZcP61fQ3YBsJKWnogqSVx6nl42pQibUghxOoBhd4aDgRUWgJCZJI7z9R
-# CMebT3N9tVfBjhlM34u5pcAMT6B3fCxZqtL79q00zF59Two63APZBlQoUctM2ynv
-# T1qJTnWmqXnuPsvVqQSIMH3GfslBgm9vH81nJrMi6i3nJkJgFIo2T0LyAZK+Jb/z
-# 5toz1/ThXHSwg9B68zDTRsUaJvViu42cL8Iat60dLZx+XyvmKstir0BN4cs4I2Ns
-# s+9SvwAi0jMbMkBih46etrxShK5TO5wikorzdZDpJEpklFtPtsP4sc20Dkduc4KW
-# ITIYkt+BUtOaDi0wUyvhHRKfwqjiK7Zb25ZjaSDbfKyNi/GL29cEbYQNkw==
+# MRYEFLqS8cm/pj1xEdeVw5TUInPSxRAOMA0GCSqGSIb3DQEBAQUABIIBgE4+RhCJ
+# haVlpQg/gFr+5Ozm5wy4qhuA6c7PIJtnnI3GSElUxv0FU3Psmko5gkkBB5k2cxfH
+# t6EqQhb4+IvD3RzioL1Gf7GIaHdmAhPRkXcsKvvH65XiDhfJw2qnN0O2s3IWJILI
+# aVqw8t9DFUYJcUL8IiXIjorTfZIZ1jPK+aA+7r95rSqeR9T/shfF8e8/Dh0YI/d+
+# C/YJuYyLtiAPt/bpay2jNxwScKTYulStyUEU9yIpxcoyRJJMhFpsCFq5ea3FnnD9
+# 9/G7CIG+e5N/WawNkf5E8JeFFZl9D2OU2p4H9R4LSuNXhgtJc73j6nHY2+Bm/qYD
+# IHal8EsPJ5E3gaCMa6DNskJZen0TZOQZ25CIugxghlID3hlR9cPi02mxcuJcQ9CE
+# QBFN179cB4XEgX85Cs+Cc1TbCFzRH7865OzeQ1w5IqWOmI9xRILK6I8PsUdeO3rg
+# uedqXjFQ0yYP91Z2ji+EACh7WFZXbrnnQckylnGsCY/WDedgOlQFN7YZgA==
 # SIG # End signature block
