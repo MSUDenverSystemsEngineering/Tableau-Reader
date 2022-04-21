@@ -135,15 +135,18 @@ Try {
 		# The MSI uninstaller will occasionally leave registry items behind that can cause issues when installing newer versions of the software.
 		if(Get-InstalledApplication -Name 'Tableau Reader') {
 			$checkForTableau = Get-InstalledApplication -Name 'Tableau Reader'
-			Write-Log -Message "Tableau Installation Status: $checkForTableau" -Source 'Pre-Installation' -LogType 'CMTrace'
-			$uninstallString = $checkForTableau.UninstallString
-			Write-Log -Message "Found the following uninstall string: $uninstallString" -Source 'Pre-Installation' -LogType 'CMTrace'
-			$uninstallerPath = $uninstallString.Substring(1, $uninstallString.lastIndexOf('.exe')+3)
-			Write-Log -Message "Uninstall string after stripping parameters: $uninstallerPath" -Source 'Pre-Installation' -LogType 'CMTrace'
-			# Write-Log -Message "Waiting 5 seconds before proceeding..." -Source 'Pre-Installation' -LogType 'CMTrace'
-			# Start-Sleep -s 5
-			Execute-Process -Path $uninstallerPath -Parameters "/uninstall /quiet" -WindowStyle "Hidden" -PassThru
-			If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+			ForEach($installedApplication in $checkForTableau) {
+				# $checkForTableau = Get-InstalledApplication -Name 'Tableau Reader'
+				Write-Log -Message "Tableau Installation Status: $installedApplication" -Source 'Pre-Installation' -LogType 'CMTrace'
+				$uninstallString = $installedApplication.UninstallString
+				Write-Log -Message "Found the following uninstall string: $uninstallString" -Source 'Pre-Installation' -LogType 'CMTrace'
+				$uninstallerPath = $uninstallString.Substring(1, $uninstallString.lastIndexOf('.exe')+3)
+				Write-Log -Message "Uninstall string after stripping parameters: $uninstallerPath" -Source 'Pre-Installation' -LogType 'CMTrace'
+				# Write-Log -Message "Waiting 5 seconds before proceeding..." -Source 'Pre-Installation' -LogType 'CMTrace'
+				# Start-Sleep -s 5
+				Execute-Process -Path $uninstallerPath -Parameters "/uninstall /quiet" -WindowStyle "Hidden" -PassThru
+				If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+		}
 		}
 
 
@@ -267,8 +270,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUbGO/ogNdKiMg3msgBlsd9vqQ
-# IySgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUD1I9CBh5Jb9nQ+zjjK6cY4hq
+# u72gghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -368,13 +371,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFO7fDPN1X1Xz1+ukf35OK+OI0UA1MA0GCSqGSIb3DQEBAQUABIIBgC3gO8uo
-# 74Fs9/FXdqOnYBHRX2u9vkK85u4uJqOVx3gXSvS7O48UhGRf3mz8XjiB/dRYXWmg
-# I8oLRZtqtchac3IJKa38SZWOm9iGPk5v3RGRps3p0vVQM+TvvHe+nnyZ9TqfvdYM
-# MTKBWsWhxl1qShwMlMTKBABU+TUL+ekR216mmAoH3kfmLAubDDvtJgXdKmA8U48a
-# AxqxuBqcn8mdJgXCGIiXs3fOmqYxgvvd12sE6LOWWQndR95pQOcWeQPpT8m8dgey
-# 0OkqVe827qhnrVEOzMO7Ili1Vz0eFk/QD+imj93pakX3qSbweg86R0Z2fGMqG7x4
-# oGwJJ5+fHRJnPtez+hi4W/QUuZ+4B6YfbMtXA3/XEb5DzTjDM+bRLp00dnqCpBKh
-# q/OWYViC/Kur262/qPK0rhvgIrVskhXjeBQZOdX97saBz07fVDiuctfeuBl7qQ9N
-# UqBuDzU7b0mHnnugEku7iP+qiaEOk9w9PvmGj7GQRLw7Hit1K3hqiXjyfA==
+# MRYEFPyljffLnAwNhclzj7qgHWLprV4DMA0GCSqGSIb3DQEBAQUABIIBgCfdOyeK
+# 0Jawvb4JpPvKDLoZL9DUv3KCSmsFiyYRRrTLYSYUhNhmxJhxguD5p2hLAMQPo2yV
+# N+yNgSxfSh4cBnRsr2/lYoiHkNxyFZj3tv+pBFGlu+AuRgl1m6LKGuSuEYVRX8TJ
+# fT84ZovSZcP61fQ3YBsJKWnogqSVx6nl42pQibUghxOoBhd4aDgRUWgJCZJI7z9R
+# CMebT3N9tVfBjhlM34u5pcAMT6B3fCxZqtL79q00zF59Two63APZBlQoUctM2ynv
+# T1qJTnWmqXnuPsvVqQSIMH3GfslBgm9vH81nJrMi6i3nJkJgFIo2T0LyAZK+Jb/z
+# 5toz1/ThXHSwg9B68zDTRsUaJvViu42cL8Iat60dLZx+XyvmKstir0BN4cs4I2Ns
+# s+9SvwAi0jMbMkBih46etrxShK5TO5wikorzdZDpJEpklFtPtsP4sc20Dkduc4KW
+# ITIYkt+BUtOaDi0wUyvhHRKfwqjiK7Zb25ZjaSDbfKyNi/GL29cEbYQNkw==
 # SIG # End signature block
