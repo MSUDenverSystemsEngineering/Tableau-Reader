@@ -67,12 +67,12 @@ Try {
 	## Variables: Application
 	[string]$appVendor = 'Tableau'
 	[string]$appName = 'Reader'
-	[string]$appVersion = '2023.0.1'
+	[string]$appVersion = '2024.2.1'
 	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '03/17/2023'
+	[string]$appScriptDate = '08/14/2024'
 	[string]$appScriptAuthor = 'Sebastian Bickford'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
@@ -163,7 +163,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2023-1-0.exe" -Parameters "ACCEPTEULA=1 AUTOUPDATE=1 DATABASEDRIVERS=1 DESKTOPSHORTCUT=1 /quiet /norestart" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
+		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2024-2-1.exe" -Parameters "ACCEPTEULA=1 AUTOUPDATE=1 DATABASEDRIVERS=1 DESKTOPSHORTCUT=1 /quiet /norestart" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 
@@ -193,7 +193,7 @@ Try {
 
 		## <Perform Pre-Uninstallation tasks here>
 		##Remove-MSIApplications -Name 'Tableau Reader'
-		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2023-1-0.exe" -Parameters "/uninstall /quiet /norestart" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "$dirFiles\TableauReader-64bit-2024-2-1.exe" -Parameters "/uninstall /quiet /norestart" -WindowStyle "Hidden" -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
